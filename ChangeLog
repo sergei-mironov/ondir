@@ -1,5 +1,6 @@
 0.3.0
   * ONDIRRC environment variable is read to load additional configs
+  * Replace leading ./ in patterns with the directory name of configs
 
 0.2.2
   * Added ~ expansion in ~/.ondirrc paths (only works if ~ is first character)

@@ -19,6 +19,8 @@ char *buffer = malloc(2048), *section = malloc(16384);
 struct odpath_t *path = root, *current = NULL;
 FILE *fp;
 int line = 0, sec_size = 0;
+char *file_copy = strdup(file); // Create a copy to avoid modifying original
+char *dir = dirname(file_copy); // Get the directory name
 
 	if (path) while (path->next) path = path->next;
 
@@ -95,7 +97,13 @@ int line = 0, sec_size = 0;
 				paths = calloc(npaths, sizeof(char*));
 
 				for (pathi = 0, tok = strtok(tok, ":"); pathi < npaths; ++pathi, tok = strtok(NULL, ":")) {
-					if (home && tok[0] == '~') {
+					if (tok[0] == '.' && tok[1] == '/') {
+					char tmppath[strlen(dir) + strlen(tok) + 1];
+						strcpy(tmppath, dir);
+						strcat(tmppath, "/");
+						strcat(tmppath, tok + 2); // Skip "./"
+						paths[pathi] = expand_envars(tmppath);
+					} else if (home && tok[0] == '~') {
 					char tmppath[strlen(tok) + strlen(home) + 1];
 
 						strcpy(tmppath, home);
@@ -122,6 +130,7 @@ int line = 0, sec_size = 0;
 	fclose(fp);
 	free(section);
 	free(buffer);
+	free(file_copy);
 	return root;
 }
 
