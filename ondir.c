@@ -30,7 +30,7 @@ char onenter[PATH_MAX + 1];
 #endif
 char working[PATH_MAX + 1], cwd[PATH_MAX + 1];
 int len, i;
-const char *src = NULL, *dst = NULL, *home = NULL;
+const char *src = NULL, *dst = NULL, *home = NULL, *rcfile = NULL;
 
 	if (argc < 2)
 		usage("Not enough arguments");
@@ -64,6 +64,12 @@ const char *src = NULL, *dst = NULL, *home = NULL;
 	if ((home = getenv("HOME"))) {
 		snprintf(working, PATH_MAX, "%s/.ondirrc", home);
 		root = load_conf(working, root);
+	}
+
+	if (rcfile = getenv("ONDIRRC")) {
+		if (strnlen(rcfile, PATH_MAX)<PATH_MAX) {
+			root = load_conf(rcfile, root);
+		}
 	}
 
 	/*
@@ -321,6 +327,8 @@ void usage(const char *msg) {
 		"\n"
 		"  <new-directory> is the current working directory. If <new-directory> is\n"
 		"  omitted, the current working directory is obtained via a call to getcwd().\n"
+		"\n"
+		"  ONDIRRC environment variable may be used to load additional config.\n"
 		"\n", msg
 	);
 	exit(1);

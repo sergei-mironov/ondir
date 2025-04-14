@@ -7,7 +7,7 @@ HEADERS=conf.h ondir.h
 OBJS=conf.o ondir.o
 TARGET=ondir
 
-VERSION=0.2.3
+VERSION=0.3.0
 DESTDIR=
 
 # Add -DUSE_ONENTERLEAVE to CFLAGS to enable support for .onenter/.onleave
